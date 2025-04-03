@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>First React</title>
+    <link rel="stylesheet" href="bootstrap.min.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="react/react.js"></script>
+    <script src="react/react-dom.js"></script>
+    <script src="react/babel.js"></script>
+    <script type="text/babel">
+      function Movies({ movie_list }) {
+        return (
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>TITLE</th>
+                <th>DESCRIPTION</th>
+                <th>YEAR</th>
+              </tr>
+            </thead>
+            <tbody>
+              {movie_list.map(movie => (
+                <tr key={movie.id}>
+                  <td>{movie.id}</td>
+                  <td>{movie.title}</td>
+                  <td>{movie.description}</td>
+                  <td>{movie.releaseYear}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      }
+
+      function App() {
+        const [title, setTitle] = React.useState("");
+        const [description, setDescription] = React.useState(""); // Stocke la description générale
+        const [films, setFilm] = React.useState([]);
+        const [isReady, setReady] = React.useState(false);
+
+        React.useEffect(() => {
+          fetch("https://reactnative.dev/movies.json")
+            .then(result => result.json())
+            .then(jsonresult => {
+              setTitle(jsonresult.title);
+              setDescription(jsonresult.description); // Récupérer la description générale
+              setFilm(jsonresult.movies);
+              setReady(true);
+            })
+            .catch(err => console.error(err));
+        }, []);
+
+        if (isReady) {
+          return (
+            <div className="App">
+              <h1 className="alert alert-secondary text-center">{title}</h1>
+              <p className="text-center">{description}</p> {/* Affichage de la description */}
+              <Movies movie_list={films} />
+            </div>
+          );
+        } else {
+          return <div>Loading...</div>;
+        }
+      }
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>

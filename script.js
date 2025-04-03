@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // const data = await response.json();
         // Simulation de réponse pour démonstration
         const data = {
-          location: { name: city, country: "France" },
-          current: { temp_c: 22, condition: { text: "Ensoleillé" } },
+          location: { name: city, country: "Sénégal" },
+          current: { temp_c: 42, condition: { text: "Ensoleillé" } },
         };
         displayWeather(data);
       } catch (error) {

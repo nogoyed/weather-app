@@ -1,22 +1,55 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Application Météo dirigée par Diagne</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container">
-<h1>Météo de Yaye nogoye</h1>
-<div class="search">
-<input type="text" id="city" placeholder="Entrez une ville">
-<button id="search">Rechercher</button>
-</div>
-<div class="weather-info" id="weather-info">
-<!-- Les données météo s'afficheront ici -->
-</div>
-</div>
-<script src="script.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>First React</title>
+    <link rel="stylesheet" href="bootstrap.min.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="react/react.js"></script>
+    <script src="react/react-dom.js"></script>
+    <script src="react/babel.js"></script>
+    <script type="text/babel">
+      function App() {
+        const [ville, setVille] = React.useState("");
+        const [temp, setTemp] = React.useState("");
+        const [desc, setDesc] = React.useState("");
+        const [icon, setIcon] = React.useState("");
+        const [isReady, setReady] = React.useState(false);
+        React.useEffect(() => {
+          fetch(
+            "https://api.openweathermap.org/data/2.5/weather?lat=14.6937&lon=-17.4441&appid=485eaae13c44dca81805beb5cfe0e7b3&units=metric"
+          )
+            .then(result => result.json())
+            .then(jsonresult => {
+              setVille(jsonresult.name);
+              setTemp(jsonresult.main.temp);
+              setDesc(jsonresult.weather[0].main);
+              setIcon(jsonresult.weather[0].icon);
+              setReady(true);
+            })
+            .catch(err => console.error(err));
+        }, []);
+        if (isReady) {
+          return (
+            <div className="App">
+              <h3>{ville}</h3>
+              <p>Temperature: {temp} °C</p>
+              <p>Description: {desc}</p>
+              <img
+                src={http://openweathermap.org/img/wn/${icon}@2x.png}
+                alt="Weather icon"
+              />
+            </div>
+          );
+        } else {
+          return <div>Loading...</div>;
+        }
+      }
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
 </html>
